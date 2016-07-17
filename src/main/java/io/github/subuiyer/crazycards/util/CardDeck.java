@@ -1,4 +1,4 @@
-package io.github.subuiyer.crazycards;
+package io.github.subuiyer.crazycards.util;
 
 
 public class CardDeck 

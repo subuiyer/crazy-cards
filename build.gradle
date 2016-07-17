@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply plugin: 'jacoco'
 
 repositories {
     mavenCentral()
@@ -16,5 +17,13 @@ sourceSets {
         resources {
             srcDir 'src/main/resources'
         }
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination "${buildDir}/jacocoHtml"
     }
 }

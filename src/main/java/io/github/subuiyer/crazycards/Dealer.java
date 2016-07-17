@@ -1,30 +1,40 @@
 package io.github.subuiyer.crazycards;
 
-import java.util.HashMap;
+import io.github.subuiyer.crazycards.util.CardDeck;
+import io.github.subuiyer.crazycards.util.CardDeckStore;
+
 
 public class Dealer 
 {
     
-    private HashMap mapDecks = null;
+    private CardDeckStore deckStore = null;
     
 
-    public Dealer()
+    public Dealer(CardDeckStore store) throws InstantiationException
     {
-        mapDecks = new HashMap();
+        if(store == null)
+        {
+            throw new InstantiationException();
+        }
+        deckStore = store;
     }
     
     
     public boolean createDeck(String name)
     {
-        if(name == null || name.length() <= 0 || mapDecks.containsKey(name) == true)
+        if(deckStore.isValidName(name) == false)
         {
             return false;
         }
         
         CardDeck deck = new CardDeck();
-        mapDecks.put(name, deck);
-        
-        return true;
+        return deckStore.put(name, deck);
+    }
+    
+    
+    public String[] getDeckNames()
+    {
+        return deckStore.getNames();
     }
     
     
