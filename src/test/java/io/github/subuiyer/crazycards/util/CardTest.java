@@ -21,4 +21,18 @@ public class CardTest
         Card card = new Card();
         Assert.assertEquals("null-null", card.toString());
     }
+    
+    @Test
+    public void testGetRankSuit()
+    {
+        Card card = new Card("suitA", "rank1");
+        Assert.assertEquals("rank1-suitA", card.getRankSuit());
+    }
+    
+    @Test
+    public void testGetRankSuit_blank()
+    {
+        Card card = new Card();
+        Assert.assertEquals("null-null", card.getRankSuit());
+    }
 }

@@ -1,6 +1,7 @@
 package io.github.subuiyer.crazycards;
 
 
+import io.github.subuiyer.crazycards.util.CardDeck;
 import io.github.subuiyer.crazycards.util.ResponseMessage;
 import java.util.ArrayList;
 import javax.ws.rs.core.Response;
@@ -122,6 +123,33 @@ public class DealerEndpointTest
         Assert.assertTrue(response.getStatus() == Response.Status.ACCEPTED.getStatusCode());
         Assert.assertTrue(msg.getStatus().equals(ResponseMessage.STATUS_FAIL));
         Assert.assertEquals("Deck not deleted", msg.getMessage());
+    }
+    
+    @Test
+    public void testGetDeck_none()
+    {
+        Mockito.when(dealerMock.getDeck("noDeck")).thenReturn(null);
+        
+        Response response = endpoint.getDeck("noDeck");
+        ResponseMessage msg = (ResponseMessage)response.getEntity();
+        Assert.assertTrue(response.getStatus() == Response.Status.OK.getStatusCode());
+        Assert.assertTrue(msg.getStatus().equals(ResponseMessage.STATUS_SUCCESS));
+        Assert.assertNull(msg.getData());
+        Assert.assertNull(msg.getMessage());
+    }
+    
+    @Test
+    public void testGetDeck()
+    {
+        Mockito.when(dealerMock.getDeck("red")).thenReturn(new CardDeck());
+        
+        Response response = endpoint.getDeck("red");
+        ResponseMessage msg = (ResponseMessage)response.getEntity();
+        Assert.assertTrue(response.getStatus() == Response.Status.OK.getStatusCode());
+        Assert.assertTrue(msg.getStatus().equals(ResponseMessage.STATUS_SUCCESS));
+        Assert.assertNotNull(msg.getData());
+        Assert.assertTrue(msg.getData().size() == 52);
+        Assert.assertNull(msg.getMessage());
     }
     
 }

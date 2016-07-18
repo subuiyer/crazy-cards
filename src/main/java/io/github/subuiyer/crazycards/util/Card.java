@@ -1,5 +1,7 @@
 package io.github.subuiyer.crazycards.util;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * This is the Card data structure. It defines the ranks and suits that a card 
  * can have. The constructor is used to set a suit and rank for the card being 
@@ -7,6 +9,7 @@ package io.github.subuiyer.crazycards.util;
  * 
  * @author Subu Iyer
  */
+@XmlRootElement
 public class Card 
 {
     public static final String[] SUITS = {"SPADE", "HEART", "DIAMOND", "CLUB"};
@@ -14,7 +17,7 @@ public class Card
     
     private String suit = null;
     private String rank = null;
-    
+    private String rankSuit = null;
     
     public Card()
     {
@@ -26,6 +29,12 @@ public class Card
     {
         this.suit = suit;
         this.rank = rank;
+    }
+    
+    
+    public String getRankSuit()
+    {
+        return toString();
     }
     
     

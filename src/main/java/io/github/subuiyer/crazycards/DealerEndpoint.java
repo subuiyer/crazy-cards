@@ -1,6 +1,7 @@
 package io.github.subuiyer.crazycards;
 
 
+import io.github.subuiyer.crazycards.util.CardDeck;
 import io.github.subuiyer.crazycards.util.DefaultCardDeckStore;
 import io.github.subuiyer.crazycards.util.ResponseMessage;
 import java.util.List;
@@ -84,6 +85,30 @@ public class DealerEndpoint
             response = Response.status(Response.Status.OK).entity(message).build();
         }
         
+        return response;
+    }
+   
+    
+    @GET
+    @Path("{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getDeck(@PathParam("name") String name)
+    {
+        CardDeck deck = dealer.getDeck(name);
+        Response response = null;
+        ResponseMessage message = null;
+        
+        if(deck == null)
+        {
+            message = new ResponseMessage(ResponseMessage.STATUS_SUCCESS, null, null);
+            response = Response.status(Response.Status.OK).entity(message).build();
+        }
+        else
+        {
+            message = new ResponseMessage(ResponseMessage.STATUS_SUCCESS, deck.getCards(), null);
+            response = Response.status(Response.Status.OK).entity(message).build();
+        }
+            
         return response;
     }
     
