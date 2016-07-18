@@ -1,7 +1,9 @@
 package io.github.subuiyer.crazycards;
 
 
+import io.github.subuiyer.crazycards.util.CardDeck;
 import io.github.subuiyer.crazycards.util.DefaultCardDeckStore;
+import io.github.subuiyer.crazycards.util.SimpleRandomShuffler;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Assert;
@@ -121,6 +123,28 @@ public class DealerTest
     {
         dealer.createDeck("blue");
         Assert.assertNull(dealer.getDeck("red"));
+    }
+    
+    @Test
+    public void testShuffle_none()
+    {
+        dealer.setShuffler(null);
+        CardDeck deckUnshuffled = new CardDeck();
+        dealer.createDeck("blue");
+        CardDeck deckBlue = dealer.getDeck("blue");
+        dealer.shuffle(deckBlue);
+        Assert.assertTrue(deckUnshuffled.isSimilar(deckBlue));
+    }
+    
+    @Test
+    public void testShuffle()
+    {
+        dealer.setShuffler(new SimpleRandomShuffler());
+        CardDeck deckUnshuffled = new CardDeck();
+        dealer.createDeck("blue");
+        CardDeck deckBlue = dealer.getDeck("blue");
+        dealer.shuffle(deckBlue);
+        Assert.assertFalse(deckUnshuffled.isSimilar(deckBlue));
     }
     
 }
