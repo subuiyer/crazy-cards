@@ -132,7 +132,7 @@ public class DealerTest
         CardDeck deckUnshuffled = new CardDeck();
         dealer.createDeck("blue");
         CardDeck deckBlue = dealer.getDeck("blue");
-        dealer.shuffle(deckBlue);
+        dealer.shuffle("blue");
         Assert.assertTrue(deckUnshuffled.isSimilar(deckBlue));
     }
     
@@ -143,7 +143,7 @@ public class DealerTest
         CardDeck deckUnshuffled = new CardDeck();
         dealer.createDeck("blue");
         CardDeck deckBlue = dealer.getDeck("blue");
-        dealer.shuffle(deckBlue);
+        dealer.shuffle("blue");
         Assert.assertFalse(deckUnshuffled.isSimilar(deckBlue));
     }
     

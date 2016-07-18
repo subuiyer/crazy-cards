@@ -93,13 +93,14 @@ public class Dealer
     
     
     /**
-     * Shuffle a given deck of cards. If no shuffler is registered, just don't shuffle.
+     * Shuffle the deck that has the given name. If no shuffler is registered, just don't shuffle.
      * 
-     * @param deck
+     * @param name
      * @return The shuffled deck. 
      */
-    public CardDeck shuffle(CardDeck deck)
+    public CardDeck shuffle(String name)
     {
+        CardDeck deck = this.getDeck(name);
         if(shuffler == null)
         {
             return deck;
