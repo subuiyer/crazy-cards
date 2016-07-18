@@ -52,8 +52,14 @@ public class DefaultCardDeckStore implements CardDeckStore
 
     
     @Override
-    public boolean delete(String name) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean delete(String name) 
+    {
+        if(name == null)
+        {
+            return false;
+        }
+        
+        return mapDecks.remove(name) != null ? true : false;
     }
 
     

@@ -51,6 +51,12 @@ public class Dealer
     }
     
     
+    public boolean deleteDeck(String name)
+    {
+        return deckStore.delete(name);
+    }
+    
+    
     public List<String> getDeckNames()
     {
         return deckStore.getNames();

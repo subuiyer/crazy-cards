@@ -95,7 +95,22 @@ public class DefaultCardDeckStoreTest
         Assert.assertFalse(store.isValidName("deck1"));
     }
     
+    @Test
+    public void testDelete()
+    {
+        DefaultCardDeckStore store = new DefaultCardDeckStore();
+        store.put("deck1", new CardDeck());
+        Assert.assertTrue(store.delete("deck1"));
+    }
     
+    @Test
+    public void testDelete_none()
+    {
+        DefaultCardDeckStore store = new DefaultCardDeckStore();
+        store.put("deck1", new CardDeck());
+        Assert.assertFalse(store.delete(null));
+        Assert.assertFalse(store.delete("noSuchDeck"));
+    }
     
     
 }

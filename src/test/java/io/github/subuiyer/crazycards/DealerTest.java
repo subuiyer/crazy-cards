@@ -66,6 +66,40 @@ public class DealerTest
         Assert.assertTrue(names.contains("green"));
     }
     
+    @Test
+    public void testDeckExists()
+    {
+        dealer.createDeck("111");
+        dealer.createDeck("222");
+        Assert.assertTrue(dealer.deckExists("111"));
+    }
     
+    @Test
+    public void testDeckExists_none()
+    {
+        dealer.createDeck("111");
+        dealer.createDeck("222");
+        Assert.assertFalse(dealer.deckExists("noSuchDeck"));
+        Assert.assertFalse(dealer.deckExists(null));
+        Assert.assertFalse(dealer.deckExists(""));
+    }
+    
+    @Test
+    public void testdeleteDeck()
+    {
+        dealer.createDeck("111");
+        dealer.createDeck("222");
+        Assert.assertTrue(dealer.deleteDeck("111"));
+    }
+    
+    @Test
+    public void testdeleteDeck_none()
+    {
+        dealer.createDeck("111");
+        dealer.createDeck("222");
+        Assert.assertFalse(dealer.deleteDeck("noSuchDeck"));
+        Assert.assertFalse(dealer.deleteDeck(null));
+        Assert.assertFalse(dealer.deleteDeck(""));
+    }
     
 }

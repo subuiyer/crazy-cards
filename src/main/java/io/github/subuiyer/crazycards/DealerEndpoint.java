@@ -2,7 +2,9 @@ package io.github.subuiyer.crazycards;
 
 
 import io.github.subuiyer.crazycards.util.DefaultCardDeckStore;
+import io.github.subuiyer.crazycards.util.ResponseMessage;
 import java.util.List;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -25,13 +27,20 @@ public class DealerEndpoint
     }
     
     
+    public void setDealer(Dealer dealer)
+    {
+        this.dealer = dealer;
+    }
+    
+    
     @GET
     @Path("/info")
     @Produces(MediaType.APPLICATION_JSON)
     public Response info() 
     {
-        String info = "{ \"name\": \"crazy-cards\" }";
-        return Response.ok(info, MediaType.APPLICATION_JSON).build();
+        ResponseMessage message = new ResponseMessage(
+                ResponseMessage.STATUS_SUCCESS, null, "name:crazy-cards");
+        return Response.status(Response.Status.OK).entity(message).build();
     }
     
     
@@ -40,7 +49,10 @@ public class DealerEndpoint
     public Response listDecks()
     {
         List<String> listNames = dealer.getDeckNames();
-        return Response.status(Response.Status.OK).entity(listNames).build();
+        ResponseMessage message = new ResponseMessage(
+                ResponseMessage.STATUS_SUCCESS, listNames, null);
+        
+        return Response.status(Response.Status.OK).entity(message).build();
     }
     
     
@@ -50,27 +62,54 @@ public class DealerEndpoint
     public Response createDeck(@PathParam("name") String name)
     {
         Response response = null;
+        ResponseMessage message = null;
         
         if(dealer.deckExists(name) == false)
         {
             boolean result = dealer.createDeck(name);
             if(result == true)
             {
-                response = Response.status(Response.Status.CREATED).entity("Deck created").build();
+                message = new ResponseMessage(ResponseMessage.STATUS_SUCCESS, null, "New deck created");
+                response = Response.status(Response.Status.CREATED).entity(message).build();
             }
             else
             {
-                response = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Deck not created").build();
+                message = new ResponseMessage(ResponseMessage.STATUS_FAIL, null, "New deck not created");
+                response = Response.status(Response.Status.CONFLICT).entity(message).build();
             }
         }
         else
         {
-            response = Response.status(Response.Status.CREATED).entity("Deck not created, deck exists already").build();
+            message = new ResponseMessage(ResponseMessage.STATUS_SUCCESS, null, "Deck not created, deck exists already");
+            response = Response.status(Response.Status.OK).entity(message).build();
         }
         
         return response;
     }
     
+    
+    @DELETE
+    @Path("{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteDeck(@PathParam("name") String name) 
+    {       
+        boolean result = dealer.deleteDeck(name);
+        Response response = null;
+        ResponseMessage message = null;
+        
+        if(result == true)
+        {
+            message = new ResponseMessage(ResponseMessage.STATUS_SUCCESS, null, "Deck deleted");
+            response = Response.status(Response.Status.OK).entity(message).build();
+        }
+        else
+        {
+            message = new ResponseMessage(ResponseMessage.STATUS_FAIL, null, "Deck not deleted");
+            response = Response.status(Response.Status.ACCEPTED).entity(message).build();
+        }
+        
+        return response;
+    }
     
     
     
