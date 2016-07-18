@@ -1,6 +1,7 @@
 package io.github.subuiyer.crazycards.util;
 
 import java.util.Arrays;
+import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -51,18 +52,18 @@ public class DefaultCardDeckStoreTest
         DefaultCardDeckStore store = new DefaultCardDeckStore();
         store.put("deck1", new CardDeck());
         store.put("deck2", new CardDeck());
-        String[] names = store.getNames();
-        Assert.assertTrue(names.length == 2);
-        Assert.assertTrue(Arrays.asList(names).contains("deck1"));
-        Assert.assertTrue(Arrays.asList(names).contains("deck2"));
+        List names = store.getNames();
+        Assert.assertTrue(names.size() == 2);
+        Assert.assertTrue(names.contains("deck1"));
+        Assert.assertTrue(names.contains("deck2"));
     }
     
     @Test
     public void testGetNames_empty()
     {
         DefaultCardDeckStore store = new DefaultCardDeckStore();
-        String[] names = store.getNames();
-        Assert.assertTrue(names.length == 0);
+        List names = store.getNames();
+        Assert.assertTrue(names.size() == 0);
     }
     
     @Test

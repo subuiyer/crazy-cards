@@ -1,6 +1,8 @@
 package io.github.subuiyer.crazycards.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class DefaultCardDeckStore implements CardDeckStore
@@ -36,9 +38,16 @@ public class DefaultCardDeckStore implements CardDeckStore
 
     
     @Override
-    public String[] getNames() 
+    public List<String> getNames() 
     {
-        return mapDecks.keySet().toArray(new String[mapDecks.size()]);
+        String[] names = mapDecks.keySet().toArray(new String[mapDecks.size()]);
+        final List<String> listNames = new ArrayList(names.length);
+        for(int i = 0; i < names.length; i++)
+        {
+            listNames.add(names[i]);
+        }
+        
+        return listNames;
     }
 
     
@@ -47,6 +56,14 @@ public class DefaultCardDeckStore implements CardDeckStore
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    
+    @Override
+    public void deleteAll() 
+    {
+        mapDecks.clear();
+    }
+    
+    
     
     @Override
     public boolean exists(String name) 
@@ -60,5 +77,5 @@ public class DefaultCardDeckStore implements CardDeckStore
     {
         return (name == null || name.length() <= 0 || exists(name) == true) ? false : true;
     }
-    
+
 }

@@ -2,21 +2,40 @@ package io.github.subuiyer.crazycards;
 
 import io.github.subuiyer.crazycards.util.CardDeck;
 import io.github.subuiyer.crazycards.util.CardDeckStore;
+import java.util.List;
 
 
 public class Dealer 
 {
     
+    private static Dealer instance = null;
     private CardDeckStore deckStore = null;
     
 
-    public Dealer(CardDeckStore store) throws InstantiationException
+    private Dealer(CardDeckStore store) throws InstantiationException
     {
         if(store == null)
         {
             throw new InstantiationException();
         }
         deckStore = store;
+    }
+    
+    
+    public static Dealer getInstance(CardDeckStore store) throws InstantiationException
+    {
+        if(instance == null)
+        {
+            instance = new Dealer(store);
+        }
+        
+        return instance;
+    }
+    
+    
+    public boolean deckExists(String name)
+    {
+        return deckStore.exists(name);
     }
     
     
@@ -32,10 +51,15 @@ public class Dealer
     }
     
     
-    public String[] getDeckNames()
+    public List<String> getDeckNames()
     {
         return deckStore.getNames();
     }
     
+    
+    public void clearAll()
+    {
+        deckStore.deleteAll();
+    }
     
 }
