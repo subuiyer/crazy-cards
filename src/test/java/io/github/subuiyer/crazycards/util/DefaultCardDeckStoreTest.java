@@ -90,9 +90,7 @@ public class DefaultCardDeckStoreTest
     {
         DefaultCardDeckStore store = new DefaultCardDeckStore();
         Assert.assertTrue(store.isValidName("deckOne"));
-        store.put("deck1", new CardDeck());
-        Assert.assertTrue(store.isValidName("deckOne"));
-        Assert.assertFalse(store.isValidName("deck1"));
+        Assert.assertTrue(store.isValidName("deck1"));
     }
     
     @Test

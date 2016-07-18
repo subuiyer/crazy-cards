@@ -102,4 +102,25 @@ public class DealerTest
         Assert.assertFalse(dealer.deleteDeck(""));
     }
     
+    @Test
+    public void testGetDeck_invalid()
+    {
+        Assert.assertNull(dealer.getDeck(null));
+        Assert.assertNull(dealer.getDeck(""));
+    }
+    
+    @Test
+    public void testGetDeck()
+    {
+        dealer.createDeck("blue");
+        Assert.assertNotNull(dealer.getDeck("blue"));
+    }
+    
+    @Test
+    public void testGetDeck_none()
+    {
+        dealer.createDeck("blue");
+        Assert.assertNull(dealer.getDeck("red"));
+    }
+    
 }

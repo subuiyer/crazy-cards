@@ -1,5 +1,6 @@
 package io.github.subuiyer.crazycards;
 
+
 import io.github.subuiyer.crazycards.util.CardDeck;
 import io.github.subuiyer.crazycards.util.CardDeckStore;
 import java.util.List;
@@ -48,6 +49,17 @@ public class Dealer
         
         CardDeck deck = new CardDeck();
         return deckStore.put(name, deck);
+    }
+    
+    
+    public CardDeck getDeck(String name)
+    {
+        if(deckStore.isValidName(name) == false)
+        {
+            return null;
+        }
+        
+        return deckStore.get(name);
     }
     
     

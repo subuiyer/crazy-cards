@@ -20,7 +20,7 @@ public class DefaultCardDeckStore implements CardDeckStore
     @Override
     public boolean put(String name, CardDeck deck) 
     {
-        if(isValidName(name) == false)
+        if(isValidName(name) == false || exists(name) == true)
         {
             return false;
         }
@@ -81,7 +81,7 @@ public class DefaultCardDeckStore implements CardDeckStore
     @Override
     public boolean isValidName(String name) 
     {
-        return (name == null || name.length() <= 0 || exists(name) == true) ? false : true;
+        return (name == null || name.length() <= 0) ? false : true;
     }
 
 }
