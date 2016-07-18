@@ -152,4 +152,26 @@ public class DealerEndpointTest
         Assert.assertNull(msg.getMessage());
     }
     
+    @Test
+    public void testShuffleDeck_noSuchDeck()
+    {
+        Mockito.when(dealerMock.shuffle("noSuchDeck")).thenReturn(false);
+        
+        Response response = endpoint.shuffleDeck("noSuchDeck");
+        ResponseMessage msg = (ResponseMessage)response.getEntity();
+        Assert.assertTrue(response.getStatus() == Response.Status.OK.getStatusCode());
+        Assert.assertTrue(msg.getStatus().equals(ResponseMessage.STATUS_FAIL));
+    }
+    
+    @Test
+    public void testShuffleDeck()
+    {
+        Mockito.when(dealerMock.shuffle("coolDeck")).thenReturn(true);
+        
+        Response response = endpoint.shuffleDeck("coolDeck");
+        ResponseMessage msg = (ResponseMessage)response.getEntity();
+        Assert.assertTrue(response.getStatus() == Response.Status.OK.getStatusCode());
+        Assert.assertTrue(msg.getStatus().equals(ResponseMessage.STATUS_SUCCESS));
+    }
+    
 }

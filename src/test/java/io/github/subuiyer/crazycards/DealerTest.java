@@ -147,4 +147,11 @@ public class DealerTest
         Assert.assertFalse(deckUnshuffled.isSimilar(deckBlue));
     }
     
+    @Test
+    public void testShuffle_noSuchDeck()
+    {
+        dealer.setShuffler(new SimpleRandomShuffler());
+        Assert.assertFalse(dealer.shuffle("noSuchDeck"));
+    }
+    
 }

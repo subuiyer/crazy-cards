@@ -63,6 +63,16 @@ public class Dealer
     
     
     /**
+     * Returns the class name of the Shuffler implementation.
+     * @return 
+     */
+    public String getShufflerClassName()
+    {
+        return (shuffler == null) ? null : shuffler.getClass().getCanonicalName();
+    }
+    
+    
+    /**
      * Check if a named deck exists.
      * 
      * @param name
@@ -98,14 +108,19 @@ public class Dealer
      * @param name
      * @return The shuffled deck. 
      */
-    public CardDeck shuffle(String name)
+    public boolean shuffle(String name)
     {
         CardDeck deck = this.getDeck(name);
+        if(deck == null)
+        {
+            return false;
+        }
         if(shuffler == null)
         {
-            return deck;
+            return true;
         }
-        return shuffler.shuffle(deck);
+        shuffler.shuffle(deck);
+        return true;
     }
     
     

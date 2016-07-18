@@ -4,9 +4,13 @@ package io.github.subuiyer.crazycards;
 import io.github.subuiyer.crazycards.util.CardDeck;
 import io.github.subuiyer.crazycards.util.DefaultCardDeckStore;
 import io.github.subuiyer.crazycards.util.ResponseMessage;
+import io.github.subuiyer.crazycards.util.Shuffler;
+import io.github.subuiyer.crazycards.util.SimpleRandomShuffler;
 import java.util.List;
+import java.util.Properties;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -24,7 +28,20 @@ public class DealerEndpoint
     
     public DealerEndpoint() throws InstantiationException
     {
+        Shuffler shuffler = null;
+        
         dealer = Dealer.getInstance(new DefaultCardDeckStore());
+        try
+        {
+            Properties properties = new Properties();
+            properties.load(getClass().getClassLoader().getResourceAsStream("config.properties"));
+            shuffler = (Shuffler)Class.forName(properties.getProperty("shuffler")).newInstance();
+        }
+        catch(Exception e)
+        {
+            shuffler = new SimpleRandomShuffler();
+        }
+        dealer.setShuffler(shuffler);
     }
     
     
@@ -40,7 +57,8 @@ public class DealerEndpoint
     public Response info() 
     {
         ResponseMessage message = new ResponseMessage(
-                ResponseMessage.STATUS_SUCCESS, null, "name:crazy-cards");
+            ResponseMessage.STATUS_SUCCESS, null, 
+            "name:crazy-cards;shuffler:" + dealer.getShufflerClassName());
         return Response.status(Response.Status.OK).entity(message).build();
     }
     
@@ -110,6 +128,29 @@ public class DealerEndpoint
         }
             
         return response;
+    }
+    
+    
+    @POST
+    @Path("{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response shuffleDeck(@PathParam("name") String name) 
+    {
+        boolean result = dealer.shuffle(name);
+        Response response = null;
+        
+        if(result == true)
+        {
+            response = Response.status(Response.Status.OK).entity(
+                new ResponseMessage(ResponseMessage.STATUS_SUCCESS, null, null)).build();
+        }
+        else
+        {
+            response = Response.status(Response.Status.OK).entity(
+                new ResponseMessage(ResponseMessage.STATUS_FAIL, null, null)).build();
+        }
+        
+        return response; 
     }
     
     
