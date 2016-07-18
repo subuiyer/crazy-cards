@@ -51,4 +51,34 @@ public class CardDeck
         return cards;
     }
     
+    
+    public void setCards(List<Card> cards)
+    {
+        this.cards = cards;
+    }
+    
+    
+    public boolean isSimilar(CardDeck deckCompare)
+    {
+        if(deckCompare == null)
+        {
+            return false;
+        }
+        
+        List<Card> deckCompareCards = deckCompare.getCards();
+        if(cards.size() != deckCompareCards.size())
+        {
+            return false;
+        }
+        
+        for(int i = 0; i < cards.size(); i++)
+        {
+            if(cards.get(i).getRankSuit().equals(deckCompareCards.get(i).getRankSuit()) == false)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
 }
