@@ -163,4 +163,11 @@ public class DealerTest
             dealer.getShufflerClassName());
     }
     
+    @Test
+    public void testGetShufflerClassName_null()
+    {
+        dealer.setShuffler(null);
+        Assert.assertEquals(null, dealer.getShufflerClassName());
+    }
+    
 }
