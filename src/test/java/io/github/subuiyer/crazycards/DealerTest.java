@@ -154,4 +154,13 @@ public class DealerTest
         Assert.assertFalse(dealer.shuffle("noSuchDeck"));
     }
     
+    @Test
+    public void testGetShufflerClassName()
+    {
+        dealer.setShuffler(new SimpleRandomShuffler());
+        Assert.assertEquals(
+            "io.github.subuiyer.crazycards.util.SimpleRandomShuffler",
+            dealer.getShufflerClassName());
+    }
+    
 }

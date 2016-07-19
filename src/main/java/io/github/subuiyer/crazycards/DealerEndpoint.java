@@ -2,6 +2,7 @@ package io.github.subuiyer.crazycards;
 
 
 import io.github.subuiyer.crazycards.util.CardDeck;
+import io.github.subuiyer.crazycards.util.CardDeckStore;
 import io.github.subuiyer.crazycards.util.DefaultCardDeckStore;
 import io.github.subuiyer.crazycards.util.ResponseMessage;
 import io.github.subuiyer.crazycards.util.Shuffler;
@@ -19,38 +20,62 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 
+/**
+ * This is the Dealer REST API endpoint. Mostly, this is a wrapper around the 
+ * Dealer functionality with standard REST responses. 
+ * 
+ * @author Subu Iyer
+ */
 @Path("dealer")
 public class DealerEndpoint 
 {
     
     private Dealer dealer = null;
    
-    
+    /**
+     * This gets the Dealer instance used by this app. It registers the right store and 
+     * shuffling mechanism that are defined in the configuration file.
+     * In case of any error loading the configuration or creating the mechanisms,
+     * the default ones are used - DefaultCardDeckStore and SimpleRandomShuffler.
+     * 
+     * @throws InstantiationException 
+     */
     public DealerEndpoint() throws InstantiationException
     {
+        CardDeckStore store = null;
         Shuffler shuffler = null;
-        
-        dealer = Dealer.getInstance(new DefaultCardDeckStore());
         try
         {
             Properties properties = new Properties();
             properties.load(getClass().getClassLoader().getResourceAsStream("config.properties"));
+            store = (CardDeckStore)Class.forName(properties.getProperty("store")).newInstance();
             shuffler = (Shuffler)Class.forName(properties.getProperty("shuffler")).newInstance();
         }
         catch(Exception e)
         {
+            store = new DefaultCardDeckStore();
             shuffler = new SimpleRandomShuffler();
         }
+        dealer = Dealer.getInstance(store);
         dealer.setShuffler(shuffler);
     }
     
-    
+    /**
+     * Setter... mostly just used in unit tests at this point.
+     * 
+     * @param dealer 
+     */
     public void setDealer(Dealer dealer)
     {
         this.dealer = dealer;
     }
     
     
+    /**
+     * Returns information about this app.
+     * 
+     * @return 
+     */
     @GET
     @Path("/info")
     @Produces(MediaType.APPLICATION_JSON)
@@ -62,7 +87,11 @@ public class DealerEndpoint
         return Response.status(Response.Status.OK).entity(message).build();
     }
     
-    
+    /**
+     * GET Method to return list of card deck names.
+     * 
+     * @return Response with message containing status and list of deck names
+     */
     @GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response listDecks()
@@ -75,6 +104,12 @@ public class DealerEndpoint
     }
     
     
+    /**
+     * PUT method to create a new named deck.
+     * 
+     * @param name
+     * @return Response with status (success if new deck is created)
+     */
     @PUT
     @Path("{name}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -107,6 +142,12 @@ public class DealerEndpoint
     }
    
     
+    /**
+     * GET the card deck with the given name.
+     * 
+     * @param name
+     * @return Response with the cards in the current sort/shuffled order 
+     */
     @GET
     @Path("{name}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -131,6 +172,12 @@ public class DealerEndpoint
     }
     
     
+    /**
+     * POST request to shuffle the named deck.
+     * 
+     * @param name
+     * @return Response with the status - success if the given deck is found and shuffled 
+     */
     @POST
     @Path("{name}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -154,6 +201,12 @@ public class DealerEndpoint
     }
     
     
+    /**
+     * DELETE the given deck.
+     * 
+     * @param name
+     * @return Response with status - success if deck is deleted 
+     */
     @DELETE
     @Path("{name}")
     @Produces(MediaType.APPLICATION_JSON)
