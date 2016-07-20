@@ -24,8 +24,10 @@ public class DefaultCardDeckStore implements CardDeckStore
         {
             return false;
         }
-        
-        mapDecks.put(name, deck);
+        synchronized(this)
+        {
+            mapDecks.put(name, deck);
+        }
         return true;
     }
 
@@ -33,14 +35,21 @@ public class DefaultCardDeckStore implements CardDeckStore
     @Override
     public CardDeck get(String name) 
     {
-        return mapDecks.get(name);
+        synchronized(this)
+        {
+            return mapDecks.get(name);
+        }
     }
 
     
     @Override
     public List<String> getNames() 
     {
-        String[] names = mapDecks.keySet().toArray(new String[mapDecks.size()]);
+        String[] names = null;
+        synchronized(this)
+        {
+            names = mapDecks.keySet().toArray(new String[mapDecks.size()]);
+        }
         final List<String> listNames = new ArrayList(names.length);
         for(int i = 0; i < names.length; i++)
         {
@@ -58,15 +67,20 @@ public class DefaultCardDeckStore implements CardDeckStore
         {
             return false;
         }
-        
-        return mapDecks.remove(name) != null ? true : false;
+        synchronized(this)
+        {
+            return mapDecks.remove(name) != null ? true : false;
+        }
     }
 
     
     @Override
     public void deleteAll() 
     {
-        mapDecks.clear();
+        synchronized(this)
+        {
+            mapDecks.clear();
+        }
     }
     
     
@@ -74,7 +88,10 @@ public class DefaultCardDeckStore implements CardDeckStore
     @Override
     public boolean exists(String name) 
     {
-        return mapDecks.containsKey(name);
+        synchronized(this)
+        {
+            return mapDecks.containsKey(name);
+        }
     }
 
     
